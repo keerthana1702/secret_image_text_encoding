@@ -6,11 +6,9 @@ const Decryption = () => {
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (acceptedFiles.length > 0) {
-      // Take only the first accepted file as the selected image
-      const firstAcceptedFile = acceptedFiles[0];
-      setSelectedImage(firstAcceptedFile);
+      setSelectedImage(acceptedFiles[0]);
+      console.log(acceptedFiles[0]);
     } else {
-      // Handle rejected files or other cases if needed
       console.log("No valid image file selected");
     }
   }, []);
@@ -23,37 +21,29 @@ const Decryption = () => {
     console.log("Decrypted text");
   };
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragAccept,
-    isDragReject,
-  } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: "image/jpeg, image/png",
   });
 
   return (
-    <div className="flex flex-col justify-center p-3 align-middle ">
+    <div className="flex flex-col items-center justify-center p-3">
       <h1 className="p-5 m-5 font-semibold text-7xl">DECRYPT THEM SECRET</h1>
-      <div className="drag-upload-image w-[50%] h-[50vh] p-5 max-w-xl flex flex-col self-center items-center justify-center bg-black mb-8 rounded-xl">
+      <div className="w-[50%] h-[50vh] p-5 max-w-xl bg-black mb-8 rounded-xl flex flex-col items-center justify-evenly min-w-max">
         {selectedImage ? (
           <>
-            <div>
-              {selectedImage && (
-                <img src={URL.createObjectURL(selectedImage)} alt="" />
-              )}
-            </div>
-            <span className="text-lg text-white ">
-              {selectedImage && selectedImage.name}
-            </span>
-            <span
-              className="p-5 font-semibold bg-white rounded-lg"
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt={selectedImage.name}
+              className="w-[70%] h-[70%] max-w-xs min-w-fit"
+            />
+            <div className="text-lg text-white">{selectedImage.name}</div>
+            <div
+              className="p-5 font-semibold bg-white rounded-lg cursor-pointer"
               onClick={handleSelectImage}
             >
               Select Image
-            </span>
+            </div>
           </>
         ) : (
           <div {...getRootProps()} className="dropzone">
@@ -64,19 +54,17 @@ const Decryption = () => {
               </p>
             ) : (
               <p className="block p-5 text-xl font-semibold text-white">
-                Drag and Drop an IMage here
+                Drag and Drop an Image here
               </p>
             )}
           </div>
         )}
       </div>
-      <div className="flex justify-center">
-        <div
-          className="p-5 text-white bg-black rounded-2xl w-[50%]"
-          onClick={handleDecryptedText}
-        >
-          Decrypted text
-        </div>
+      <div
+        className="p-5 text-white bg-black cursor-pointer rounded-2xl"
+        onClick={handleDecryptedText}
+      >
+        Decrypted text
       </div>
     </div>
   );
